@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour
 
     private const string AXIS_H = "Horizontal", AXIS_V ="Vertical";
     public float speedMovement = 5;
-    public GameObject bomb;
     private GameObject player;
+    public GameObject bombManager;
 
 
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if(Input.GetKeyDown("space")){
-            Instantiate(bomb, transform.position, Quaternion.identity);
+            bombManager.GetComponent<BombManager>().GetNextBomb();
         }
 
         
