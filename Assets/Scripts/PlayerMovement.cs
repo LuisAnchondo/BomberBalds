@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {   
 
-
         if(Input.GetAxisRaw(AXIS_V) != 0){
             float direction = Input.GetAxisRaw(AXIS_V);
             transform.position += ((direction/Math.Abs(direction)) * transform.up  * speedMovement *  Time.deltaTime);
