@@ -4,122 +4,59 @@ using UnityEngine;
 
 public class KirbyMovement : MonoBehaviour
 {
+    // TODO: Documentar juas juas
     public float speed;
     private Rigidbody2D myRigidbody2D;
     private Vector2 change;
-    enum LastPosition {Left, Right, Down, Up}
-    private LastPosition lastPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody2D = GetComponent<Rigidbody2D>();
-        
-        lastPosition = LastPosition.Down;
     }
 
-    // Update is called once per frame
+    private bool mvH;
+    private bool mvV;
+    private float mvHoz;
+    private float mvVer;
+
     void Update()
     {
-        change.x = Input.GetAxisRaw("Horizontal");
-        change.y = Input.GetAxisRaw("Vertical");
-
+        mvHoz = Input.GetAxisRaw("Horizontal");
+        mvVer = Input.GetAxisRaw("Vertical");
     }
 
     private void FixedUpdate()
     {
-        // Right detection
-        if(change.x > 0)
-        {
-            if(change.y > 0 && lastPosition == LastPosition.Right || lastPosition == LastPosition.Up && change.y > 0)
-            {
-                change.x = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Up;
-            }else if (change.y < 0 && lastPosition == LastPosition.Right || lastPosition == LastPosition.Down && change.y < 0)
-            {
-                change.x = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Down;
-            }
-            else
-            {
-                change.y = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Right;
-            }
-        }
+        change.x = 0;
+        change.y = 0;
 
-        // Left detection
-        if (change.x < 0)
+        if (Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Horizontal") != 0)
         {
-            if (change.y > 0 && lastPosition == LastPosition.Left || lastPosition == LastPosition.Up && change.y > 0)
+            if (mvH)
             {
-                change.x = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Up;
+                change.y = mvVer;
             }
-            else if (change.y < 0 && lastPosition == LastPosition.Left || lastPosition == LastPosition.Down && change.y < 0)
+            else if (mvV)
             {
-                change.x = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Down;
+                change.x = mvHoz;
             }
             else
             {
-                change.y = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Left;
+                change.x = mvHoz;
+                change.y = mvVer;
             }
         }
-
-        // Up detection
-        if (change.y > 0)
+        else
         {
-            if (change.x > 0 && lastPosition == LastPosition.Up || lastPosition == LastPosition.Right && change.x > 0)
-            {
-                change.y = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Right;
-            }
-            else if (change.x < 0 && lastPosition == LastPosition.Up || lastPosition == LastPosition.Left && change.x < 0)
-            {
-                change.y = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Left;
-            }
-            else
-            {
-                change.x = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Up;
-            }
+            mvH = mvHoz != 0;
+            change.x = mvHoz;
+            mvV = mvVer != 0;
+            change.y = mvVer;
         }
-
-        // Down detection
-        if (change.y < 0)
-        {
-            if (change.x > 0 && lastPosition == LastPosition.Down || lastPosition == LastPosition.Right && change.x > 0)
-            {
-                change.y = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Right;
-            }
-            else if (change.x < 0 && lastPosition == LastPosition.Down || lastPosition == LastPosition.Left && change.x < 0)
-            {
-                change.y = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Left;
-            }
-            else
-            {
-                change.x = 0;
-                MoveCharacter();
-                lastPosition = LastPosition.Down;
-            }
-        }
-        print(change);
+        MoveCharacter();
     }
+
 
     void MoveCharacter()
     {
